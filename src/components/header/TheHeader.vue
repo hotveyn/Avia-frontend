@@ -15,7 +15,7 @@
         <li>
           <RouterLink
               class="rt-link"
-              :to="{name: 'auth'}"
+              :to="{name: 'profile'}"
           >
             Личный кабинет
           </RouterLink>
