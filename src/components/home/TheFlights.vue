@@ -86,44 +86,32 @@ let fetchIsError = ref<boolean>(true);
 
 
 async function submit() {
+
   if (!(from.value && to.value && from_date.value && passengers.value || back_date.value)) {
     console.log("not");
     return;
   }
 
-  // try {
-    const response = await fetch("http://127.0.0.1:8000/api/flight", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(
+  const response = await fetch("http://127.0.0.1:8000/api/flight?"
+      + new URLSearchParams(
           {
-            "from": from.value,
-            "to": to.value,
-            "date1": from_date.value,
-            "date2": back_date?.value,
-            "passengers": passengers.value,
-          },
-      ),
-    })
+            from: from.value,
+            to: to.value,
+            date1: from_date.value,
+            date2: back_date.value,
+            passengers: passengers.value.toString(),
+          }));
 
-    if (!response.ok) {
-      fetchIsError.value = true;
-      flightData.value = undefined;
-    } else{
-      response.json()
-          .then(data => {
-            console.log(data.data)
-            flightData.value = data.data;
-            fetchIsError.value = false;
-          })
-    }
-
-  // } catch (error) {
-  //   console.log(error);
-  //   fetchIsError.value = true;
-  // }
+  if (!response.ok) {
+    fetchIsError.value = true;
+    flightData.value = undefined;
+  } else {
+    response.json()
+        .then(data => {
+          flightData.value = data.data;
+          fetchIsError.value = false;
+        });
+  }
 }
 
 </script>
