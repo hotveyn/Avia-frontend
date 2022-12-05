@@ -29,19 +29,40 @@
         <h2>Регистрация</h2>
         <form>
           <input
+              v-model.trim="firstNameReg"
               class="reg__inp inp"
               type="text"
-              placeholder="Логин"
+              placeholder="Имя"
           >
           <input
+              v-model.trim="lastNameReg"
+              class="reg__inp inp"
+              type="text"
+              placeholder="Фамилия"
+          >
+          <input
+              v-model.trim="phoneReg"
+              class="reg__inp inp"
+              type="text"
+              placeholder="Телефон"
+          >
+          <input
+              v-model.trim="passwordReg"
               class="reg__inp inp"
               type="password"
               placeholder="Пароль"
           >
           <input
+              v-model.trim="passwordRepeatReg"
               class="reg__inp inp"
               type="password"
-              placeholder="Повтроите пароль"
+              placeholder="Повторите пароль"
+          >
+          <input
+              v-model.trim="documentNumberReg"
+              class="reg__inp inp"
+              type="number"
+              placeholder="Номер документа"
           >
           <button
               @click.prevent="reg()"
@@ -58,10 +79,21 @@
 
 <script setup lang="ts">
 
+import Router from "@/routes/router";
 import {ref} from "vue";
+import {useRouter} from "vue-router";
+
+const route = useRouter();
 
 let passwordLog = ref<string>("");
 let phoneLog = ref<string>("");
+
+let phoneReg = ref<number>(79646660328);
+let passwordReg = ref<string>("password");
+let passwordRepeatReg = ref<string>("password");
+let firstNameReg = ref<string>("Ivan");
+let lastNameReg = ref<string>("Shestopalov");
+let documentNumberReg = ref<number>(2231234);
 
 async function auth() {
   if (!(passwordLog.value && phoneLog.value)) {
@@ -73,7 +105,7 @@ async function auth() {
     const response = await fetch("http://127.0.0.1:8000/api/login", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         "phone": phoneLog.value,
@@ -81,20 +113,53 @@ async function auth() {
       }),
     });
 
-    if (!response.ok){
-      throw new Error("Пошёл нахуй быдло")
-    }else{
-      
+    if (!response.ok) {
+      throw new Error("Пошёл нахуй быдло");
+    } else {
+      const data = await response.json();
+      localStorage.setItem("token", data.data.token);
+      await route.push({name: "home"});
     }
-    const data = await response.json()
-    console.log(data);
 
   } catch (error) {
-    console.log("ошибка")
+    console.log("ошибка");
   }
 
 }
 
+async function reg() {
+  if (phoneReg.value &&
+      passwordReg.value &&
+      passwordRepeatReg.value &&
+      firstNameReg.value &&
+      lastNameReg.value &&
+      documentNumberReg.value &&
+      (passwordReg.value === passwordRepeatReg.value)) {
+
+    let formData = {
+      "document_number": documentNumberReg.value,
+      "first_name": firstNameReg.value,
+      "last_name": lastNameReg.value,
+      "password": passwordReg.value,
+      "phone": phoneReg.value,
+    };
+
+    const response = await fetch("http://127.0.0.1:8000/api/register", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      let data = await response.json();
+      console.log(data.error);
+    }
+  } else {
+    console.log("заполните все поля");
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -111,7 +176,8 @@ async function auth() {
     .auth-from {
       background-color: $myLightBlue;
       width: 50%;
-      min-height: 400px;
+      min-height: 520px;
+      height: 100%;
       padding: 30px 20px;
       outline: 2px solid $myDarkBlue;
       @include myFlex();
