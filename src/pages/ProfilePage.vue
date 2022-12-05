@@ -24,10 +24,12 @@ import {onMounted, ref} from "vue";
 let user = ref<IUser | null>();
 let isLoading = ref<boolean>(true);
 
+let userToken: string|null = localStorage.getItem("token")
+
 async function getUserInfo() {
   fetch("http://127.0.0.1:8000/api/user/",{
     headers:{
-      "Authorization": "Bearer b9149750-6123-4ca9-be8e-c548f28e791a"
+      "Authorization": `Bearer ${userToken}`
     }
   })
       .then(response => response.json())
