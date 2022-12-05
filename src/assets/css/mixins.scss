@@ -1,0 +1,9 @@
+$myBlue: #7ba5ec;
+$myDarkBlue: #5f89a0;
+$myLightBlue: #d2e6ff;
+@mixin myFlex($jc:space-between,$ai:center,$fd:row) {
+  display: flex;
+  justify-content: $jc;
+  align-items: $ai;
+  flex-direction: $fd;
+}
