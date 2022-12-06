@@ -147,15 +147,17 @@ async function reg() {
     const response = await fetch("http://127.0.0.1:8000/api/register", {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
     });
 
     if (!response.ok) {
       let data = await response.json();
-      console.log(data.error);
+      return console.log(data.error);
     }
+
+    await route.push({name: "home"});
   } else {
     console.log("заполните все поля");
   }
