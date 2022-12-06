@@ -1,13 +1,10 @@
 import {computed} from "vue";
 import {createRouter, createWebHistory, RouteRecordRaw} from "vue-router";
+import SearchPage from "@/pages/SearchPage.vue"
 import HomePage from "@/pages/HomePage.vue";
 import AuthPage from "@/pages/AuthPage.vue";
 import ProfilePage from "@/pages/ProfilePage.vue";
 
-
-function isAuth() {
-    return !!localStorage.getItem("token");
-}
 
 
 const routes: RouteRecordRaw[] = [
@@ -21,7 +18,7 @@ const routes: RouteRecordRaw[] = [
         name: "profile",
         component: ProfilePage,
         beforeEnter: (to, from, next) => {
-            if (isAuth()) next();
+            if (localStorage.getItem("token")) next();
             else next("/auth");
         },
     },
@@ -30,6 +27,11 @@ const routes: RouteRecordRaw[] = [
         name: "auth",
         component: AuthPage,
     },
+    {
+        path: "/search",
+        name: "search",
+        component: SearchPage
+    }
 
 ];
 
