@@ -1,6 +1,7 @@
 export default interface IAirport{
-    city: string
+    city?: string
     airport: string
     iata: string
-    time: string
+    time?: string
+    name?: string
 }
