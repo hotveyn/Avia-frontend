@@ -8,9 +8,16 @@
         <h1>AviaYamal</h1>
       </RouterLink>
       <ul>
-<!--        todo: router links-->
+        <!--        todo: router links-->
         <li><a href="#">Акции</a></li>
-        <li><a href="#">Поиск</a></li>
+        <li>
+          <RouterLink
+              class="rt-link"
+              :to="{name:'search'}"
+          >
+            Поиск
+          </RouterLink>
+        </li>
         <li><a href="#">Регистрация на рейс</a></li>
         <li>
           <RouterLink
@@ -32,7 +39,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-header{
+header {
   background-color: #7ba5ec;
   padding: 50px 0;
   display: flex;
@@ -40,23 +47,23 @@ header{
   align-items: center;
   color: white;
 
-  .rt-link{
-    color:white
+  .rt-link {
+    color: white
   }
 
 
-  .container__header{
+  .container__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    ul{
+    ul {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 30px;
 
-      a{
+      a {
         color: white;
       }
     }
